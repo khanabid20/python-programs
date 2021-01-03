@@ -25,7 +25,7 @@ video_file_pattern = r'.VID_(\d{4})(\d{2})(\d{2})_.*.mp4'
 
 def moveTo(src, dest):
     """
-    This method will src & dest and move the src file to dest folder.
+    This method will take src & dest and move the src file to dest folder.
     Note: 'file' param has been removed from this method
 
     :param src:

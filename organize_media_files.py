@@ -62,7 +62,7 @@ for subdir, dirs, files in os.walk(dest):
                 # extract EXIF data
                 exif_data = image.getexif()
 
-                tag = ''
+                tag_id = 0
                 # Loop over exif data to fetch Make: property of an image
                 for tag_id in exif_data:
                     # get the tag name, instead of human unreadable tag id

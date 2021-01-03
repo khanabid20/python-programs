@@ -4,7 +4,7 @@
 # author          :abid.khan
 # date            :20210103
 # version         :1.0
-# usage           :python organize_media_files.py d:\path\to\folder-containing-images-and-videos
+# usage           :python organize_media_files.py /path/to/folder-containing-images-and-videos
 # notes           :
 # python_version  :3.7.3
 # ==============================================================================
@@ -17,7 +17,7 @@ from PIL.ExifTags import TAGS
 import shutil
 
 # Destination path as an argument
-dest = sys.argv[0]
+dest = sys.argv[1]
 
 image_file_pattern = r'(?:PANO|IMG)_(\d{4})(\d{2})(\d{2})_.*.jpg'
 video_file_pattern = r'.VID_(\d{4})(\d{2})(\d{2})_.*.mp4'
@@ -41,12 +41,13 @@ def moveTo(src, dest):
     print(src, dest)
     try:
         shutil.move(src, dest)
-        # shutil.move(src, dest + "\\" + file)
+        # shutil.move(src, dest + "/" + file)
         # shutil.move(src, dest, copy_function=shutil.copy2)
         # os.rename(src, dest + "/" + file)
         # os.replace(src, dest + "/" + file)
     except:
         print("Couldn't move the file. It is maybe being used by some other process.")
+
 
 for subdir, dirs, files in os.walk(dest):
     for file in files:
@@ -61,19 +62,20 @@ for subdir, dirs, files in os.walk(dest):
                 # extract EXIF data
                 exif_data = image.getexif()
 
+                tag = ''
                 # Loop over exif data to fetch Make: property of an image
                 for tag_id in exif_data:
                     # get the tag name, instead of human unreadable tag id
                     tag = TAGS.get(tag_id, tag_id)
                     if tag == 'Make':
-                        make_data = exif_data.get(tag_id)
                         break
+                make_data = exif_data.get(tag_id)
 
                 # Close image instance
                 image.close()
 
                 image_src = os.path.join(subdir, file)
-                image_dest = os.path.join(subdir, make_data + "\\" + date)
+                image_dest = os.path.join(subdir, make_data + "/" + date)
 
                 moveTo(image_src, image_dest)
 
@@ -83,9 +85,8 @@ for subdir, dirs, files in os.walk(dest):
                 # Get the file date
                 date = result.group(1) + "-" + result.group(2) + "-" + result.group(3)
                 video_src = os.path.join(subdir, file)
-                video_dest = os.path.join(subdir, make_data + "\\vid\\" + date)
-
-                moveTo(file, video_src, video_dest)
+                video_dest = os.path.join(subdir, "/vid/" + date)
+                moveTo(video_src, video_dest)
 
 
 # reference links:

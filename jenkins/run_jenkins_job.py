@@ -57,3 +57,10 @@ if __name__ == "__main__":
     next_build_number = jenkins_obj.build_job()
     exit_code = jenkins_obj.poll_status(next_build_number)
     sys.exit(exit_code)
+
+'''
+ref:
+- https://python-jenkins.readthedocs.io/en/latest/api.html
+- *** https://prashant-vats.medium.com/trigger-jenkins-job-remotely-using-python-22420792bac2
+- https://devops.stackexchange.com/questions/3442/trigger-jenkins-job-from-gitlab-ci-with-parameters/5313#5313
+'''

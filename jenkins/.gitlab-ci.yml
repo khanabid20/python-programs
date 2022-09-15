@@ -38,7 +38,6 @@ Post Merged:
     - *export_common_env
     - export JENKINS_JOB_NAME='gitlab-folder/test-job'
     - export JENKINS_PARAMETERS='{ "DISPLAY":"From GitLab CI - Post-submit job", "SLEEP_COUNT":"10" }'    # dictionary of jenkins job parameters
-    # Change directory
     # Run the script
     - pip install python-jenkins
     - chmod +x run_jenkins_job.py

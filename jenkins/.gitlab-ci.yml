@@ -1,0 +1,47 @@
+stages:
+  - trigger-jenkins-build
+
+image: python:3.8-alpine
+
+before_script:
+  - python --version
+
+.export_common_env: &export_common_env
+    # set all env variables
+    - export JENKINS_CONSOLE_OUTPUT=True    # Flag to turn on/off printing of jenkins logs onto the console
+    - export JENKINS_URL=${JENKINS_URL}
+    - export JENKINS_API_TOKEN=${JENKINS_API_TOKEN}
+    - export JENKINS_USERNAME="khanabid20"
+    # - JENKINS_PASSWORD=${JENKINS_API_TOKEN}
+
+On Merge Request:
+  stage: trigger-jenkins-build
+  script:
+    - echo "Run on a merge request only to a target branch as 'devops' and source 'test'"
+    - *export_common_env
+    - export JENKINS_JOB_NAME='gitlab-folder/test-job'   # Do not put a slash in the begining
+    - export JENKINS_PARAMETERS='{ "DISPLAY":"From GitLab CI - Pre-submit job", "SLEEP_COUNT":"10" }'    # dictionary of jenkins job parameters
+    # Run the script
+    - pip install python-jenkins
+    - chmod +x run_jenkins_job.py
+    - ./run_jenkins_job.py
+  only:
+    refs:
+      - merge_requests
+    variables:
+      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "test" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "devops"
+
+Post Merged:
+  stage: trigger-jenkins-build
+  script:
+    - echo "Run once merged - target branch as 'devops' and source 'test'"
+    - *export_common_env
+    - export JENKINS_JOB_NAME='gitlab-folder/test-job'
+    - export JENKINS_PARAMETERS='{ "DISPLAY":"From GitLab CI - Post-submit job", "SLEEP_COUNT":"10" }'    # dictionary of jenkins job parameters
+    # Change directory
+    # Run the script
+    - pip install python-jenkins
+    - chmod +x run_jenkins_job.py
+    - ./run_jenkins_job.py
+  only:
+      - devops

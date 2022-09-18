@@ -1,0 +1,14 @@
+image: python:3.8-alpine
+
+before_script:
+  - python --version
+
+variables:
+  # set all env variables
+  JENKINS_CONSOLE_OUTPUT: "True"    # Flag to turn on/off printing of jenkins logs onto the console
+  JENKINS_URL: "${JENKINS_URL}"
+  JENKINS_API_TOKEN: "${JENKINS_API_TOKEN}"
+  JENKINS_USERNAME: "khanabid20"
+  # JENKINS_PASSWORD: "${JENKINS_API_TOKEN}"
+  JENKINS_JOB_NAME: "name-of-your-job"
+  JENKINS_PARAMETERS: '{"key":"value"}'   # dictionary of jenkins job parameters
